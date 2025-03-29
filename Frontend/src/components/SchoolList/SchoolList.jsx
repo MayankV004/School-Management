@@ -1,28 +1,22 @@
 import React, { useEffect } from 'react';
-import axios from 'axios';
+import { useSchools } from '../hooks/useSchools';
 
-function SchoolList({ userLocation, schools, setSchools }) {
+function SchoolList({ userLocation }) {
+  const { schools, loading, error, fetchNearbySchools } = useSchools();
+
   useEffect(() => {
-    const fetchSchools = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/api/listSchools', {
-          params: {
-            latitude: userLocation.latitude,
-            longitude: userLocation.longitude
-          }
-        });
+    if (userLocation?.latitude && userLocation?.longitude) {
+      fetchNearbySchools(userLocation.latitude, userLocation.longitude);
+    }
+  }, [userLocation, fetchNearbySchools]);
 
-        if (response.data.success) {
-          setSchools(response.data.schools);
-        }
-      } catch (error) {
-        console.error('Error fetching schools:', error.response?.data || error.message);
-        
-      }
-    };
+  if (loading) {
+    return <p className="text-gray-500 text-center">Loading...</p>;
+  }
 
-    fetchSchools();
-  }, [userLocation, setSchools]);
+  if (error) {
+    return <p className="text-red-500 text-center">Error: {error}</p>;
+  }
 
   return (
     <div>

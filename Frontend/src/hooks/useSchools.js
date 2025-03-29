@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import axios from 'axios';
-
+import { API_BASE_URL } from '../config/api.js';
 export const useSchools = () => {
   const [schools, setSchools] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -11,7 +11,7 @@ export const useSchools = () => {
     setError(null);
     
     try {
-      const response = await axios.get('http://localhost:3000/api/listSchools', {
+      const response = await axios.get(`${API_BASE_URL}/listSchools`, {
         params: { latitude, longitude }
       });
       
@@ -33,7 +33,7 @@ export const useSchools = () => {
     setError(null);
     
     try {
-      const response = await axios.post('http://localhost:3000/api/addSchool', schoolData);
+      const response = await axios.post(`${API_BASE_URL}/addSchool`, schoolData);
       
       if (response.data.success) {
         return { success: true, message: 'School added successfully' };

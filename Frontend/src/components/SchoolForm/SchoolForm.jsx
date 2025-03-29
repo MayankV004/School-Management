@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useSchools } from '../hooks/useSchools';
+
 
 function SchoolForm() {
+  const { addSchool, loading, error } = useSchools();
+  const [successMessage, setSuccessMessage] = useState('');
+  
   const [formData, setFormData] = useState({
     name: '',
     address: '',
     latitude: '',
     longitude: ''
   });
-
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -16,38 +20,48 @@ function SchoolForm() {
       [name]: value
     }));
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      // Convert numeric fields to numbers
-      const payload = {
-        ...formData,
-        latitude: parseFloat(formData.latitude),
-        longitude: parseFloat(formData.longitude)
-      };
-
-      const response = await axios.post('http://localhost:3000/api/addSchool', payload);
-      
-      if (response.data.success) {
-        
-        // Reset form
-        setFormData({
-          name: '',
-          address: '',
-          latitude: '',
-          longitude: ''
-        });
-      }
-    } catch (error) {
-      console.error('Error adding school:', error.response?.data || error.message);
-   
+    setSuccessMessage('');
+    
+    // Convert numeric fields to numbers
+    const payload = {
+      ...formData,
+      latitude: parseFloat(formData.latitude),
+      longitude: parseFloat(formData.longitude)
+    };
+    
+    const result = await addSchool(payload);
+    
+    if (result.success) {
+      setSuccessMessage('School added successfully!');
+      // Reset form
+      setFormData({
+        name: '',
+        address: '',
+        latitude: '',
+        longitude: ''
+      });
     }
   };
-
+  
   return (
     <div className="bg-white p-6 rounded-lg shadow">
       <h2 className="text-2xl font-semibold mb-4">Add New School</h2>
+      
+      {successMessage && (
+        <div className="mb-4 p-2 bg-green-100 text-green-800 rounded">
+          {successMessage}
+        </div>
+      )}
+      
+      {error && (
+        <div className="mb-4 p-2 bg-red-100 text-red-800 rounded">
+          {error}
+        </div>
+      )}
+      
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-gray-700 font-bold mb-2">
@@ -61,6 +75,7 @@ function SchoolForm() {
             required
             className="w-full p-2 border rounded"
             placeholder="Enter school name"
+            disabled={loading}
           />
         </div>
         
@@ -76,6 +91,7 @@ function SchoolForm() {
             required
             className="w-full p-2 border rounded"
             placeholder="Enter school address"
+            disabled={loading}
           />
         </div>
         
@@ -93,6 +109,7 @@ function SchoolForm() {
               step="any"
               className="w-full p-2 border rounded"
               placeholder="Latitude"
+              disabled={loading}
             />
           </div>
           
@@ -109,15 +126,17 @@ function SchoolForm() {
               step="any"
               className="w-full p-2 border rounded"
               placeholder="Longitude"
+              disabled={loading}
             />
           </div>
         </div>
         
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition"
+          className={`w-full ${loading ? 'bg-blue-300' : 'bg-blue-500 hover:bg-blue-600'} text-white p-2 rounded transition`}
+          disabled={loading}
         >
-          Add School
+          {loading ? 'Adding School...' : 'Add School'}
         </button>
       </form>
     </div>
