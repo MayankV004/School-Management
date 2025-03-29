@@ -16,11 +16,7 @@ if (process.env.INIT_DB === 'true') {
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
-app.use(cors({
-  origin: 'https://school-management-frontend-lwey.onrender.com', // Your React app's address
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-}));
+app.use(cors());
 
 // ------------------------------------Routes---------------------------------------
 app.use('/api', schoolRoutes);
