@@ -25,6 +25,10 @@ app.use(cors({
 // ------------------------------------Routes---------------------------------------
 app.use('/api', schoolRoutes);
 
+app.get("/",(req,res)=>{
+  res.send("Server is working")
+})
+
 // error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
