@@ -34,6 +34,8 @@ const createSchoolTable = async () => {
     }
 };
 
-createSchoolTable();
+export const initDatabase = async () => {
+    await createSchoolTable();
+};
 
 export default pool;

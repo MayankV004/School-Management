@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-export const useLocation = (initialLocation = { latitude: 37.7749, longitude: -122.4194 }) => {
+export const useLocation = (initialLocation = { latitude: 9.7380493, longitude: 76.6621959 }) => {
   const [location, setLocation] = useState(initialLocation);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

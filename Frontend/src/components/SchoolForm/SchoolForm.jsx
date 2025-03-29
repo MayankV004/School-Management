@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function SchoolForm({ setSchools }) {
+function SchoolForm() {
   const [formData, setFormData] = useState({
     name: '',
     address: '',
