@@ -1,6 +1,13 @@
 # School Management System
 
+
+
 A comprehensive web application for managing school information and helping users find nearby educational institutions.
+
+## Hosted Link
+```bash
+https://school-management-frontend-lwey.onrender.com
+```
 
 ## Features
 
