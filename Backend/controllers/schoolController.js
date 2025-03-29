@@ -1,5 +1,6 @@
 import { addSchool, listSchools } from "../models/School.js";
 import { validateSchool } from "../utils/validation.js";
+import { validateParameter } from "../utils/parameterValidation.js";
 
 export const createSchool = async (req, res) => {
   try {
@@ -30,6 +31,13 @@ export const createSchool = async (req, res) => {
 
 export const getSchools = async (req, res) => {
   try {
+    const { error } = validateParameter(req.query);
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        message: error.details[0].message,
+      });
+    }
     const { latitude, longitude } = req.query;
 
     if (!latitude || !longitude) {
